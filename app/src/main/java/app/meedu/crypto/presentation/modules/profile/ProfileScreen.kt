@@ -1,0 +1,27 @@
+package app.meedu.crypto.presentation.modules.profile
+
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@Composable
+fun ProfileScreen() {
+    Scaffold {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            Text(text = "Profile")
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    ProfileScreen()
+}
