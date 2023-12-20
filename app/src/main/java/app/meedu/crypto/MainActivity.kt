@@ -16,34 +16,28 @@ import app.meedu.crypto.presentation.modules.splash.SplashScreen
 
 class MainActivity : ComponentActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-        setContent {
-
-            Navigator {
-
-                NavHost(
-                    navController = LocalNavController.current,
-                    startDestination = Screens.Splash.route
-                ) {
-                    composable(Screens.Splash.route) {
-                        SplashScreen()
-                    }
-                    composable(Screens.Dashboard.route) {
-                        DashboardScreen()
-                    }
-                    composable(Screens.Profile.route) {
-                        ProfileScreen()
-                    }
-                    composable(Screens.SignIn.route) {
-                        SignInScreen()
-                    }
-                }
-            }
-
-
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    setContent {
+      Navigator {
+        NavHost(
+          navController = LocalNavController.current,
+          startDestination = Screens.Dashboard.route
+        ) {
+          composable(Screens.Splash.route) {
+            SplashScreen()
+          }
+          composable(Screens.Dashboard.route) {
+            DashboardScreen()
+          }
+          composable(Screens.Profile.route) {
+            ProfileScreen()
+          }
+          composable(Screens.SignIn.route) {
+            SignInScreen()
+          }
         }
+      }
     }
+  }
 }

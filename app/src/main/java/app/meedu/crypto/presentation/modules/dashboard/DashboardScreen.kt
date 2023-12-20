@@ -1,48 +1,76 @@
 package app.meedu.crypto.presentation.modules.dashboard
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import app.meedu.crypto.presentation.LocalNavController
-import app.meedu.crypto.presentation.Navigator
-import app.meedu.crypto.presentation.Screens
+import app.meedu.crypto.core.*
+import app.meedu.crypto.domain.models.*
+import app.meedu.crypto.presentation.*
+import kotlinx.coroutines.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DashboardScreen() {
+  val exchangeRepository = LocalExchangeRepository.current
+  val state = remember {
+    mutableStateListOf<Crypto>()
+  }
 
+  val items = state.toList()
 
-    Scaffold(
-        topBar = {
-            TopAppBar {
-                val navController = LocalNavController.current
-                Button(onClick = {
-                    navController.navigate(Screens.Profile.route)
-                }) {
-                    Text(text = "Profile")
-                }
-            }
+  LaunchedEffect(
+    key1 = "dashboard",
+    block = {
+      when (val result = exchangeRepository.getCryptos("bitcoin,ethereum,monero")) {
+        is Either.Right -> {
+          state.addAll(result.value)
         }
-    ) {
-        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            Text(text = "Dashboard")
-        }
+        else -> {}
+      }
+    },
+  )
+
+  Scaffold(topBar = {
+    TopAppBar {
+      val navController = LocalNavController.current
+      Button(
+        onClick = {
+          navController.navigate(Screens.Profile.route)
+        },
+      ) {
+        Text(text = "Profile")
+      }
     }
+  }) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+
+      if (items.isEmpty()) {
+        CircularProgressIndicator()
+      } else {
+        Column {
+          items.forEach { crypto ->
+            Text(text = crypto.name)
+          }
+        }
+      }
+    }
+  }
 }
 
 @Preview
 @Composable
 private fun Preview() {
-    Navigator {
-        DashboardScreen()
-    }
+  Navigator {
+    DashboardScreen()
+  }
 }
